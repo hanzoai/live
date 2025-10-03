@@ -10,6 +10,10 @@ https://github.com/user-attachments/assets/68d3d7f5-80ba-45f7-b83f-add8b970b2d8
 
 https://github.com/user-attachments/assets/855a1e5b-cdcd-42ac-8223-d73c999a8026
 
+## Resolution
+
+The generation will be faster for smaller resolutions resulting in smoother video. The visual quality will be better at 480x832 which is the resolution that the model was trained on, but you may need a more powerful GPU in order to achieve a higher FPS (the ~20 FPS reported in the paper is on a H100).
+
 ## Prompting
 
 The [original project repo](https://github.com/NVlabs/LongLive) contains additional tips for prompting.
@@ -22,7 +26,7 @@ For example:
 
 "A 3D animated scene. A **panda** walks along a path towards the camera in a park on a spring day."
 
-"A 3D animated scene. A **panda** halts along a path towards the camera in a park on a spring day."
+"A 3D animated scene. A **panda** halts along a path in a park on a spring day."
 
 **Cinematic Long Takes**
 
