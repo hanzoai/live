@@ -6,13 +6,29 @@ The model is trained using [Self-Forcing](https://self-forcing.github.io/) on Wa
 
 ## Examples
 
+The following examples include the prompts used so you can try them as well.
+
 https://github.com/user-attachments/assets/68d3d7f5-80ba-45f7-b83f-add8b970b2d8
 
+Prompts:
+1. "A 3D animated scene. A **panda** walks along a path towards the camera on a spring day."
+2. "A 3D animated scene. A **panda** sits down on a path in a park on a spring day."
+3. "A 3D animated scene. A **panda** stands up on a path and raises its arms in a park on a spring day."
+
 https://github.com/user-attachments/assets/855a1e5b-cdcd-42ac-8223-d73c999a8026
+
+Prompts:
+1. A dog walking in grass.
+2. A cat walking in grass.
+3. A lion walking in grass.
 
 ## Resolution
 
 The generation will be faster for smaller resolutions resulting in smoother video. The visual quality will be better at 480x832 which is the resolution that the model was trained on, but you may need a more powerful GPU in order to achieve a higher FPS (the ~20 FPS reported in the paper is on a H100).
+
+## Seed
+
+The seed parameter in the UI can be used to reproduce generations. If you like the generation for a certain seed value and sequence of prompts you can re-use that value later with those same prompts to reproduce the generation.
 
 ## Prompting
 
