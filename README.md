@@ -9,6 +9,7 @@ Scope is a tool for running and customizing real-time, interactive generative AI
 ## Features
 
 - Autoregressive video diffusion models
+  - [StreamDiffusionV2](./pipelines/streamdiffusionv2/docs/usage.md)
   - [LongLive](./pipelines/longlive/docs/usage.md)
 - WebRTC real-time streaming
 - Low latency async video processing pipelines
