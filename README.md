@@ -1,5 +1,7 @@
 # Daydream Scope
 
+[![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/mnfGR4Fjhp)
+
 ![longlivedemo1](https://github.com/user-attachments/assets/7fa46227-4405-4ad9-9cd7-a53724f0203d)
 
 Scope is a tool for running and customizing real-time, interactive generative AI pipelines and models.
