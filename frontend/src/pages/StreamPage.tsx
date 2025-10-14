@@ -11,7 +11,7 @@ import { useWebRTCStats } from "../hooks/useWebRTCStats";
 import { usePipeline } from "../hooks/usePipeline";
 import { useStreamState } from "../hooks/useStreamState";
 import { PIPELINES } from "../data/pipelines";
-import { getDefaultDenoisingSteps } from "../lib/utils";
+import { getDefaultDenoisingSteps, getDefaultResolution } from "../lib/utils";
 import type { PipelineId } from "../types";
 
 export function StreamPage() {
@@ -105,11 +105,16 @@ export function StreamPage() {
     const newDefaultPrompt = PIPELINES[pipelineId]?.defaultPrompt || "";
     setCurrentPrompts([newDefaultPrompt]);
 
-    // Update denoising steps based on pipeline
+    // Update denoising steps and resolution based on pipeline
     const newDenoisingSteps = getDefaultDenoisingSteps(pipelineId);
+    const newResolution = getDefaultResolution(pipelineId);
 
     // Update the pipeline in settings
-    updateSettings({ pipelineId, denoisingSteps: newDenoisingSteps });
+    updateSettings({
+      pipelineId,
+      denoisingSteps: newDenoisingSteps,
+      resolution: newResolution,
+    });
   };
 
   const handleResolutionChange = (resolution: {
@@ -337,7 +342,9 @@ export function StreamPage() {
             pipelineId={settings.pipelineId}
             onPipelineIdChange={handlePipelineIdChange}
             isStreaming={isStreaming}
-            resolution={settings.resolution || { height: 320, width: 576 }}
+            resolution={
+              settings.resolution || getDefaultResolution(settings.pipelineId)
+            }
             onResolutionChange={handleResolutionChange}
             seed={settings.seed ?? 42}
             onSeedChange={handleSeedChange}

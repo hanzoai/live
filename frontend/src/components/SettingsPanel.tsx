@@ -23,7 +23,7 @@ import { Hammer, Info, Minus, Plus, RotateCcw } from "lucide-react";
 import { PIPELINES } from "../data/pipelines";
 import { PARAMETER_METADATA } from "../data/parameterMetadata";
 import { DenoisingStepsSlider } from "./DenoisingStepsSlider";
-import { getDefaultDenoisingSteps } from "../lib/utils";
+import { getDefaultDenoisingSteps, getDefaultResolution } from "../lib/utils";
 import type { PipelineId } from "../types";
 
 const MIN_DIMENSION = 16;
@@ -56,7 +56,7 @@ export function SettingsPanel({
   pipelineId,
   onPipelineIdChange,
   isStreaming = false,
-  resolution = { height: 320, width: 576 },
+  resolution,
   onResolutionChange,
   seed = 42,
   onSeedChange,
@@ -70,6 +70,8 @@ export function SettingsPanel({
   onManageCacheChange,
   onResetCache,
 }: SettingsPanelProps) {
+  // Use pipeline-specific default if resolution is not provided
+  const effectiveResolution = resolution || getDefaultResolution(pipelineId);
   // Local state for noise scale for immediate UI feedback
   const [localNoiseScale, setLocalNoiseScale] = useState<number>(noiseScale);
 
@@ -123,14 +125,14 @@ export function SettingsPanel({
 
     // Always update the value (even if invalid)
     onResolutionChange?.({
-      ...resolution,
+      ...effectiveResolution,
       [dimension]: value,
     });
   };
 
   const incrementResolution = (dimension: "height" | "width") => {
     const maxValue = 2048;
-    const newValue = Math.min(maxValue, resolution[dimension] + 1);
+    const newValue = Math.min(maxValue, effectiveResolution[dimension] + 1);
     handleResolutionChange(dimension, newValue);
   };
 
@@ -139,7 +141,7 @@ export function SettingsPanel({
       pipelineId === "longlive" || pipelineId === "streamdiffusionv2"
         ? MIN_DIMENSION
         : 1;
-    const newValue = Math.max(minValue, resolution[dimension] - 1);
+    const newValue = Math.max(minValue, effectiveResolution[dimension] - 1);
     handleResolutionChange(dimension, newValue);
   };
 
@@ -313,7 +315,7 @@ export function SettingsPanel({
                       </Button>
                       <Input
                         type="number"
-                        value={resolution.height}
+                        value={effectiveResolution.height}
                         onChange={e => {
                           const value = parseInt(e.target.value);
                           if (!isNaN(value)) {
@@ -362,7 +364,7 @@ export function SettingsPanel({
                       </Button>
                       <Input
                         type="number"
-                        value={resolution.width}
+                        value={effectiveResolution.width}
                         onChange={e => {
                           const value = parseInt(e.target.value);
                           if (!isNaN(value)) {

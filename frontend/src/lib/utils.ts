@@ -14,3 +14,15 @@ export function getDefaultDenoisingSteps(pipelineId: PipelineId): number[] {
   }
   return [700, 500]; // Default fallback
 }
+
+export function getDefaultResolution(pipelineId: PipelineId): {
+  height: number;
+  width: number;
+} {
+  if (pipelineId === "longlive") {
+    return { height: 320, width: 576 };
+  } else if (pipelineId === "streamdiffusionv2") {
+    return { height: 512, width: 512 };
+  }
+  return { height: 320, width: 576 }; // Default fallback
+}

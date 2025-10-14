@@ -5,6 +5,7 @@ import type {
   SettingsState,
   PromptData,
 } from "../types";
+import { getDefaultResolution } from "../lib/utils";
 
 export function useStreamState() {
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics>({
@@ -22,6 +23,7 @@ export function useStreamState() {
 
   const [settings, setSettings] = useState<SettingsState>({
     pipelineId: "streamdiffusionv2",
+    resolution: getDefaultResolution("streamdiffusionv2"), // Default resolution for StreamDiffusionV2
     seed: 42,
     denoisingSteps: [700, 500], // Default for StreamDiffusionV2
     noiseScale: 0.7, // Default noise scale for StreamDiffusionV2
