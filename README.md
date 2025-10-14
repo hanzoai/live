@@ -15,7 +15,7 @@ Scope is a tool for running and customizing real-time, interactive generative AI
   - [LongLive](./pipelines/longlive/docs/usage.md)
 - WebRTC real-time streaming
 - Low latency async video processing pipelines
-- UI with text prompting and video/camera input modes
+- Interactive UI with text prompting, model parameter controls and video/camera/text input modes
 
 ...and more to come!
 
