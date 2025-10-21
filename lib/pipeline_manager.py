@@ -17,29 +17,26 @@ logger = logging.getLogger(__name__)
 
 
 def get_device() -> torch.device:
-    """Get the appropriate device based on hardware and mode settings."""
+    """Get the appropriate device based on hardware auto-detection."""
     cpu_mode = os.getenv("SCOPE_CPU_MODE") == "1"
-    mlx_mode = os.getenv("SCOPE_MLX_MODE") == "1"
 
-    # MLX mode takes precedence on macOS
-    if mlx_mode and platform.system() == "Darwin":
-        try:
-            import mlx.core as mx
-            logger.info(f"Using MLX backend (version {mx.__version__})")
-            # For PyTorch models, we'll use MPS (Metal Performance Shaders) device
-            # which is compatible with MLX
-            return torch.device("mps")
-        except ImportError:
-            logger.warning("MLX not available, falling back to CPU")
-            return torch.device("cpu")
-
+    # Force CPU mode if requested
     if cpu_mode:
+        logger.info("CPU mode enabled via SCOPE_CPU_MODE")
         return torch.device("cpu")
-    elif torch.cuda.is_available():
+
+    # Auto-detect available hardware
+    if torch.cuda.is_available():
+        # CUDA available (Linux/Windows with NVIDIA GPU)
+        logger.info(f"Using CUDA device: {torch.cuda.get_device_name(0)}")
         return torch.device("cuda")
     elif platform.system() == "Darwin" and hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-        # Automatically use Metal/MPS on macOS if available
-        logger.info("Using MPS (Metal) backend on macOS")
+        # macOS with Apple Silicon - automatically use Metal/MPS
+        try:
+            import mlx.core as mx
+            logger.info(f"Using MLX/Metal backend on Apple Silicon (MLX version {mx.__version__})")
+        except ImportError:
+            logger.info("Using MPS (Metal) backend on Apple Silicon")
         return torch.device("mps")
     else:
         logger.warning("No GPU available, falling back to CPU")
