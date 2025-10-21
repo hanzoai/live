@@ -1,18 +1,16 @@
 [project]
-name = "daydream-scope"
+name = "hanzo-live"
 version = "0.1.0a1"
 description = "Real-time AI video generation and streaming tool with WebRTC support"
 readme = "README.md"
 requires-python = ">=3.10.12"
 authors = [
-    {name = "Yondon Fu", email = "yondon@livepeer.org"},
-    {name = "Rafal Leszko", email = "rafal@livepeer.org"}
+    {name = "Hanzo AI", email = "hello@hanzo.ai"},
 ]
 maintainers = [
-    {name = "Yondon Fu", email = "yondon@livepeer.org"},
-    {name = "Rafal Leszko", email = "rafal@livepeer.org"}
+    {name = "Hanzo AI", email = "hello@hanzo.ai"},
 ]
-keywords = ["ai", "video", "streaming", "webrtc", "diffusion", "real-time"]
+keywords = ["ai", "video", "streaming", "webrtc", "diffusion", "real-time", "hanzo", "mlx"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -53,7 +51,7 @@ dependencies = [
 ]
 
 [project.scripts]
-daydream-scope = "app:main"
+hanzo-live = "app:main"
 build = "build:main"
 
 [project.urls]

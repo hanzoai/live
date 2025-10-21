@@ -96,13 +96,13 @@ def get_git_commit_hash() -> str:
 def print_version_info():
     """Print version information and exit."""
     try:
-        pkg_version = version("daydream-scope")
+        pkg_version = version("hanzo-live")
     except Exception:
         pkg_version = "unknown"
 
     git_hash = get_git_commit_hash()
 
-    print(f"daydream-scope: {pkg_version}")
+    print(f"hanzo-live: {pkg_version}")
     print(f"git commit: {git_hash}")
 
 
@@ -217,7 +217,7 @@ app = FastAPI(
     lifespan=lifespan,
     title="Hanzo Live",
     description="A tool for running and customizing real-time, interactive generative AI pipelines and models",
-    version=version("daydream-scope"),
+    version=version("hanzo-live"),
 )
 
 # Add CORS middleware
@@ -362,7 +362,7 @@ def open_browser_when_ready(host: str, port: int, server):
 
 
 def main():
-    """Main entry point for the daydream-scope command."""
+    """Main entry point for the hanzo-live command."""
     parser = argparse.ArgumentParser(
         description="Hanzo Live - Real-time AI video generation and streaming"
     )
