@@ -19,6 +19,9 @@ except Exception:
 
 import warnings
 
+# Flash attention is CUDA-only - auto-disable on MPS/CPU
+CUDA_AVAILABLE = torch.cuda.is_available()
+
 __all__ = [
     "flash_attention",
     "attention",
@@ -153,7 +156,8 @@ def attention(
     dtype=torch.bfloat16,
     fa_version=None,
 ):
-    if FLASH_ATTN_2_AVAILABLE or FLASH_ATTN_3_AVAILABLE:
+    # Flash attention requires CUDA - auto-disable on MPS/CPU for hardware compatibility
+    if CUDA_AVAILABLE and (FLASH_ATTN_2_AVAILABLE or FLASH_ATTN_3_AVAILABLE):
         return flash_attention(
             q=q,
             k=k,

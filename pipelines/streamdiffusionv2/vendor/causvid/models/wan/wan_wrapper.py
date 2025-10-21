@@ -236,10 +236,10 @@ class WanDiffusionWrapper(DiffusionModelInterface):
         we have x0 = x_t - sigma_t * pred
         see derivations https://chatgpt.com/share/67bf8589-3d04-8008-bc6e-4cf1a24e2d0e
         """
-        # use higher precision for calculations
+        # use higher precision for calculations (float32 for MPS compatibility)
         original_dtype = flow_pred.dtype
         flow_pred, xt, sigmas, timesteps = map(
-            lambda x: x.double().to(flow_pred.device),
+            lambda x: x.float().to(flow_pred.device),
             [flow_pred, xt, self.scheduler.sigmas, self.scheduler.timesteps],
         )
 

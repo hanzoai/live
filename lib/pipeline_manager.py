@@ -222,11 +222,15 @@ class PipelineManager:
         self, pipeline_id: str, load_params: dict | None = None
     ):
         """Synchronous pipeline loading (runs in thread executor)."""
+        # Get the project root directory (parent of lib/)
+        from pathlib import Path
+        project_root = Path(__file__).parent.parent
+
         if pipeline_id == "streamdiffusionv2":
             from lib.models_config import get_model_file_path, get_models_dir
             from pipelines.streamdiffusionv2.pipeline import StreamDiffusionV2Pipeline
 
-            config = OmegaConf.load("pipelines/streamdiffusionv2/model.yaml")
+            config = OmegaConf.load(project_root / "pipelines/streamdiffusionv2/model.yaml")
             models_dir = get_models_dir()
             config["model_dir"] = str(models_dir)
             config["text_encoder_path"] = str(
@@ -236,12 +240,12 @@ class PipelineManager:
             )
 
             # Use load parameters for resolution and seed
-            height = 512
-            width = 512
+            height = 128
+            width = 128
             seed = 42
             if load_params:
-                height = load_params.get("height", 512)
-                width = load_params.get("width", 512)
+                height = load_params.get("height", 128)
+                width = load_params.get("width", 128)
                 seed = load_params.get("seed", 42)
 
             config["height"] = height
@@ -296,7 +300,7 @@ class PipelineManager:
             from lib.models_config import get_model_file_path, get_models_dir
             from pipelines.longlive.pipeline import LongLivePipeline
 
-            config = OmegaConf.load("pipelines/longlive/model.yaml")
+            config = OmegaConf.load(project_root / "pipelines/longlive/model.yaml")
             models_dir = get_models_dir()
             config["model_dir"] = str(models_dir)
             config["generator_path"] = get_model_file_path(
@@ -331,7 +335,7 @@ class PipelineManager:
             from lib.models_config import get_model_file_path, get_models_dir
             from pipelines.selfforcing.pipeline import SelfForcingPipeline
 
-            config = OmegaConf.load("pipelines/selfforcing/model.yaml")
+            config = OmegaConf.load(project_root / "pipelines/selfforcing/model.yaml")
             models_dir = get_models_dir()
             config["model_dir"] = str(models_dir)
             config["checkpoint_path"] = get_model_file_path(
