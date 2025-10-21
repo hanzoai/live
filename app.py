@@ -141,22 +141,32 @@ async def lifespan(app: FastAPI):
     # Startup
     global webrtc_manager, pipeline_manager
 
-    # Check CUDA availability before proceeding (unless running in CPU mode)
+    # Check hardware availability before proceeding
     cpu_mode = os.getenv("SCOPE_CPU_MODE") == "1"
-    if not torch.cuda.is_available() and not cpu_mode:
+    mlx_mode = os.getenv("SCOPE_MLX_MODE") == "1"
+
+    if not torch.cuda.is_available() and not cpu_mode and not mlx_mode:
         error_msg = (
             "CUDA is not available on this system. "
             "This application currently requires a CUDA-compatible GPU and "
             "other hardware will be supported in the future. "
-            "Use --cpu flag to run in CPU-only mode for development."
+            "Use --cpu flag to run in CPU-only mode or --mlx flag to use Apple Metal on macOS."
         )
         logger.error(error_msg)
         sys.exit(1)
 
-    if cpu_mode:
+    if mlx_mode:
+        try:
+            import mlx.core as mx
+            logger.info(f"Running with MLX/Metal backend (MLX version {mx.__version__})")
+        except ImportError:
+            logger.warning("MLX not available, will fall back to CPU")
+    elif cpu_mode:
         logger.warning("Running in CPU-only mode - performance will be limited")
     elif torch.cuda.is_available():
         logger.info(f"CUDA available: {torch.cuda.get_device_name(0)}")
+    else:
+        logger.info("Using default device detection")
 
     # Download models if needed
     try:
@@ -374,12 +384,21 @@ def main():
         action="store_true",
         help="Run in CPU-only mode (skip CUDA requirement check)",
     )
+    parser.add_argument(
+        "--mlx",
+        action="store_true",
+        help="Run with MLX/Metal backend on Apple Silicon (macOS only)",
+    )
 
     args = parser.parse_args()
 
     # Store CPU mode in environment for lifespan handler
     if args.cpu:
         os.environ["SCOPE_CPU_MODE"] = "1"
+
+    # Store MLX mode in environment for lifespan handler
+    if args.mlx:
+        os.environ["SCOPE_MLX_MODE"] = "1"
 
     # Handle version flag
     if args.version:

@@ -4,7 +4,9 @@ import asyncio
 import gc
 import logging
 import os
+import platform
 import threading
+import traceback
 from enum import Enum
 from typing import Any
 
@@ -15,14 +17,32 @@ logger = logging.getLogger(__name__)
 
 
 def get_device() -> torch.device:
-    """Get the appropriate device based on CUDA availability and CPU mode."""
+    """Get the appropriate device based on hardware and mode settings."""
     cpu_mode = os.getenv("SCOPE_CPU_MODE") == "1"
+    mlx_mode = os.getenv("SCOPE_MLX_MODE") == "1"
+
+    # MLX mode takes precedence on macOS
+    if mlx_mode and platform.system() == "Darwin":
+        try:
+            import mlx.core as mx
+            logger.info(f"Using MLX backend (version {mx.__version__})")
+            # For PyTorch models, we'll use MPS (Metal Performance Shaders) device
+            # which is compatible with MLX
+            return torch.device("mps")
+        except ImportError:
+            logger.warning("MLX not available, falling back to CPU")
+            return torch.device("cpu")
+
     if cpu_mode:
         return torch.device("cpu")
     elif torch.cuda.is_available():
         return torch.device("cuda")
+    elif platform.system() == "Darwin" and hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        # Automatically use Metal/MPS on macOS if available
+        logger.info("Using MPS (Metal) backend on macOS")
+        return torch.device("mps")
     else:
-        logger.warning("CUDA not available, falling back to CPU")
+        logger.warning("No GPU available, falling back to CPU")
         return torch.device("cpu")
 
 
@@ -169,6 +189,7 @@ class PipelineManager:
             except Exception as e:
                 error_msg = f"Failed to load pipeline {pipeline_id}: {str(e)}"
                 logger.error(error_msg)
+                logger.error(f"Traceback:\n{traceback.format_exc()}")
 
                 self._status = PipelineStatus.ERROR
                 self._error_message = error_msg

@@ -11,6 +11,8 @@ import time
 class CausalStreamInferencePipeline(torch.nn.Module):
     def __init__(self, args, device):
         super().__init__()
+        # Store device for later use
+        self.device = device
         # Step 1: Initialize all models
         self.generator_model_name = getattr(args, "generator_name", args.model_name)
 
@@ -50,7 +52,7 @@ class CausalStreamInferencePipeline(torch.nn.Module):
         ):  # Warp the denoising step according to the scheduler time shift
             timesteps = torch.cat(
                 (self.scheduler.timesteps.cpu(), torch.tensor([0], dtype=torch.float32))
-            ).cuda()
+            ).to(device)
             self.denoising_step_list = timesteps[1000 - self.denoising_step_list]
 
         self.num_transformer_blocks = 30
@@ -187,7 +189,7 @@ class CausalStreamInferencePipeline(torch.nn.Module):
                     flattened_pred,
                     random_noise,
                     next_timestep
-                    * torch.ones([batch_size], device="cuda", dtype=torch.long),
+                    * torch.ones([batch_size], device=noise.device, dtype=torch.long),
                 ).unflatten(0, denoised_pred.shape[:2])
             else:
                 # for getting real output

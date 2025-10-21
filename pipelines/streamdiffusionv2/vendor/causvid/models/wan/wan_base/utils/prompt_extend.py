@@ -17,7 +17,8 @@ try:
     from flash_attn import flash_attn_varlen_func
 
     FLASH_VER = 2
-except ModuleNotFoundError:
+except Exception:
+    # Catch all exceptions - flash_attn may be installed but fail to import on non-CUDA systems
     flash_attn_varlen_func = None  # in compatible with CPU machines
     FLASH_VER = None
 
