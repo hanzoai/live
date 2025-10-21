@@ -86,7 +86,7 @@ export function usePipeline(options: UsePipelineOptions = {}) {
       }
 
       if (isPollingRef.current) {
-        pollTimeoutRef.current = setTimeout(poll, pollInterval);
+        pollTimeoutRef.current = setTimeout(poll, pollInterval) as unknown as number;
       }
     };
 
@@ -125,7 +125,7 @@ export function usePipeline(options: UsePipelineOptions = {}) {
                 `Pipeline load timeout after ${maxTimeout / 1000} seconds`
               )
             );
-          }, maxTimeout);
+          }, maxTimeout) as unknown as number;
         });
 
         // Wait for pipeline to be loaded or error

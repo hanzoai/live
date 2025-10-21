@@ -15,7 +15,7 @@ SCALE_SIZE = 16
 # The VAE does 8x spatial downsampling
 VAE_SPATIAL_DOWNSAMPLE_FACTOR = 8
 
-# https://github.com/daydreamlive/scope/blob/a6a7aa1d7a3be60d3b444e254f83a9fd09e9151a/pipelines/base/wan2_1/modules/causal_model.py#L117
+# https://github.com/hanzoai/live/blob/a6a7aa1d7a3be60d3b444e254f83a9fd09e9151a/pipelines/base/wan2_1/modules/causal_model.py#L117
 MAX_ROPE_FREQ_TABLE_SEQ_LEN = 1024
 
 logger = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ class InferencePipeline(torch.nn.Module):
         # This means that it has positions for 1024 latent frames
         # current_start is used to index into this table
         # We need to make sure that current_start does not shift past the max sequence length of the RoPE frequency table
-        # when slicing here https://github.com/daydreamlive/scope/blob/a6a7aa1d7a3be60d3b444e254f83a9fd09e9151a/pipelines/base/wan2_1/modules/causal_model.py#L52
+        # when slicing here https://github.com/hanzoai/live/blob/a6a7aa1d7a3be60d3b444e254f83a9fd09e9151a/pipelines/base/wan2_1/modules/causal_model.py#L52
         # When we hit the limit we reset the caches and indices
         max_current_start = MAX_ROPE_FREQ_TABLE_SEQ_LEN - self.num_frame_per_block
         if self.current_start >= max_current_start:

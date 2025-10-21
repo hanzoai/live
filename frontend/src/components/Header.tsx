@@ -8,10 +8,10 @@ export function Header({ className = "" }: HeaderProps) {
   return (
     <header className={`w-full bg-background px-6 py-4 ${className}`}>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-medium text-foreground">Daydream Scope</h1>
+        <h1 className="text-xl font-medium text-foreground">Hanzo Live</h1>
         <div className="flex items-center gap-3">
           <a
-            href="https://github.com/daydreamlive/scope"
+            href="https://github.com/hanzoai/live"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-80 transition-opacity"

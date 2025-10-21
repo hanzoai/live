@@ -37,14 +37,14 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: daydreamlive
+          username: hanzoai
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: daydreamlive/scope
+          images: hanzoai/live
           tags: |
             type=raw,value=${{ github.event.inputs.version }}
             type=raw,value=latest
@@ -55,6 +55,6 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: daydreamlive/scope:${{ github.event.inputs.version }},daydreamlive/scope:latest
+          tags: hanzoai/live:${{ github.event.inputs.version }},hanzoai/live:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

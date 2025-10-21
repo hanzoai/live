@@ -126,7 +126,7 @@ export function useWebRTCStats({
       calculateStats();
 
       // Then collect every 1s for more responsive updates
-      statsIntervalRef.current = setInterval(calculateStats, 1000);
+      statsIntervalRef.current = setInterval(calculateStats, 1000) as unknown as number;
     } else {
       // Clear interval and reset stats
       if (statsIntervalRef.current) {

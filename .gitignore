@@ -14,3 +14,9 @@ notes/
 .cursorrules
 .cursorignore
 .cursorindexingignore
+.playwright-mcp
+
+AGENTS.md
+CLAUDE.md
+GROK.md
+QWEN.md

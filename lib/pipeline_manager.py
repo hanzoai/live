@@ -14,6 +14,18 @@ from omegaconf import OmegaConf
 logger = logging.getLogger(__name__)
 
 
+def get_device() -> torch.device:
+    """Get the appropriate device based on CUDA availability and CPU mode."""
+    cpu_mode = os.getenv("SCOPE_CPU_MODE") == "1"
+    if cpu_mode:
+        return torch.device("cpu")
+    elif torch.cuda.is_available():
+        return torch.device("cuda")
+    else:
+        logger.warning("CUDA not available, falling back to CPU")
+        return torch.device("cpu")
+
+
 class PipelineNotAvailableException(Exception):
     """Exception raised when pipeline is not available for processing."""
 
@@ -219,7 +231,7 @@ class PipelineManager:
             config["seed"] = seed
 
             pipeline = StreamDiffusionV2Pipeline(
-                config, device=torch.device("cuda"), dtype=torch.bfloat16
+                config, device=get_device(), dtype=torch.bfloat16
             )
             logger.info("StreamDiffusionV2 pipeline initialized")
             return pipeline
@@ -237,7 +249,7 @@ class PipelineManager:
             pipeline = PassthroughPipeline(
                 height=height,
                 width=width,
-                device=torch.device("cuda"),
+                device=get_device(),
                 dtype=torch.bfloat16,
             )
             logger.info("Passthrough pipeline initialized")
@@ -256,7 +268,7 @@ class PipelineManager:
             pipeline = VodPipeline(
                 height=height,
                 width=width,
-                device=torch.device("cuda"),
+                device=get_device(),
                 dtype=torch.bfloat16,
             )
             logger.info("VOD pipeline initialized")
@@ -292,9 +304,43 @@ class PipelineManager:
             config["seed"] = seed
 
             pipeline = LongLivePipeline(
-                config, device=torch.device("cuda"), dtype=torch.bfloat16
+                config, device=get_device(), dtype=torch.bfloat16
             )
             logger.info("LongLive pipeline initialized")
+            return pipeline
+
+        elif pipeline_id == "selfforcing":
+            from lib.models_config import get_model_file_path, get_models_dir
+            from pipelines.selfforcing.pipeline import SelfForcingPipeline
+
+            config = OmegaConf.load("pipelines/selfforcing/model.yaml")
+            models_dir = get_models_dir()
+            config["model_dir"] = str(models_dir)
+            config["checkpoint_path"] = get_model_file_path(
+                "Self-Forcing/checkpoints/self_forcing_dmd.pt"
+            )
+            config["text_encoder_path"] = str(
+                get_model_file_path(
+                    "WanVideo_comfy/umt5-xxl-enc-fp8_e4m3fn.safetensors"
+                )
+            )
+
+            height = 320
+            width = 576
+            seed = 42
+            if load_params:
+                height = load_params.get("height", 320)
+                width = load_params.get("width", 576)
+                seed = load_params.get("seed", 42)
+
+            config["height"] = height
+            config["width"] = width
+            config["seed"] = seed
+
+            pipeline = SelfForcingPipeline(
+                config, device=get_device(), dtype=torch.bfloat16
+            )
+            logger.info("Self-Forcing pipeline initialized")
             return pipeline
 
         else:

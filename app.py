@@ -141,15 +141,22 @@ async def lifespan(app: FastAPI):
     # Startup
     global webrtc_manager, pipeline_manager
 
-    # Check CUDA availability before proceeding
-    if not torch.cuda.is_available():
+    # Check CUDA availability before proceeding (unless running in CPU mode)
+    cpu_mode = os.getenv("SCOPE_CPU_MODE") == "1"
+    if not torch.cuda.is_available() and not cpu_mode:
         error_msg = (
             "CUDA is not available on this system. "
             "This application currently requires a CUDA-compatible GPU and "
-            "other hardware will be supported in the future."
+            "other hardware will be supported in the future. "
+            "Use --cpu flag to run in CPU-only mode for development."
         )
         logger.error(error_msg)
         sys.exit(1)
+
+    if cpu_mode:
+        logger.warning("Running in CPU-only mode - performance will be limited")
+    elif torch.cuda.is_available():
+        logger.info(f"CUDA available: {torch.cuda.get_device_name(0)}")
 
     # Download models if needed
     try:
@@ -195,7 +202,7 @@ def get_pipeline_manager() -> PipelineManager:
 
 app = FastAPI(
     lifespan=lifespan,
-    title="Scope",
+    title="Hanzo Live",
     description="A tool for running and customizing real-time, interactive generative AI pipelines and models",
     version=version("daydream-scope"),
 )
@@ -344,7 +351,7 @@ def open_browser_when_ready(host: str, port: int, server):
 def main():
     """Main entry point for the daydream-scope command."""
     parser = argparse.ArgumentParser(
-        description="Daydream Scope - Real-time AI video generation and streaming"
+        description="Hanzo Live - Real-time AI video generation and streaming"
     )
     parser.add_argument(
         "--version",
@@ -362,8 +369,17 @@ def main():
     parser.add_argument(
         "--port", type=int, default=8000, help="Port to bind to (default: 8000)"
     )
+    parser.add_argument(
+        "--cpu",
+        action="store_true",
+        help="Run in CPU-only mode (skip CUDA requirement check)",
+    )
 
     args = parser.parse_args()
+
+    # Store CPU mode in environment for lifespan handler
+    if args.cpu:
+        os.environ["SCOPE_CPU_MODE"] = "1"
 
     # Handle version flag
     if args.version:
