@@ -1,6 +1,6 @@
 [project]
 name = "hanzo-live"
-version = "0.1.0a1"
+version = "0.1.0a2"
 description = "Real-time AI video generation and streaming tool with WebRTC support"
 readme = "README.md"
 requires-python = ">=3.10.12"
