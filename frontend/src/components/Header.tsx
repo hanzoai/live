@@ -1,4 +1,5 @@
 import { BookOpenText } from "lucide-react";
+import { HanzoLogo } from "@hanzo/logo/react";
 
 interface HeaderProps {
   className?: string;
@@ -8,7 +9,10 @@ export function Header({ className = "" }: HeaderProps) {
   return (
     <header className={`w-full bg-background px-6 py-4 ${className}`}>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-medium text-foreground">Hanzo Live</h1>
+        <div className="flex items-center gap-3">
+          <HanzoLogo variant="white" size={32} />
+          <h1 className="text-xl font-medium text-foreground">Hanzo Live</h1>
+        </div>
         <div className="flex items-center gap-3">
           <a
             href="https://github.com/hanzoai/live"

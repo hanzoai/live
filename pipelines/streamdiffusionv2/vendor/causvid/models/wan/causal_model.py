@@ -37,7 +37,7 @@ def causal_rope_apply(x, grid_sizes, freqs, start_frame=0):
 
         # precompute multipliers
         x_i = torch.view_as_complex(
-            x[i, :seq_len].to(torch.float64).reshape(seq_len, n, -1, 2)
+            x[i, :seq_len].to(torch.float32).reshape(seq_len, n, -1, 2)
         )
         freqs_i = torch.cat(
             [
