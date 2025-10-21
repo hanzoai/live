@@ -50,7 +50,7 @@ Install [uv](https://docs.astral.sh/uv/getting-started/installation/) which is n
 
 ```
 git clone git@github.com:hanzoai/live.git
-cd scope
+cd live
 ```
 
 #### Build
@@ -66,10 +66,10 @@ uv run build
 > [!IMPORTANT]
 > If you are running the server in a cloud environment, make sure to read the [Firewalls](#firewalls) section.
 
-This will start the server and on the first run will also download required model weights. The default directory where model weights are stored is `~/.daydream-scope/models`.
+This will start the server and on the first run will also download required model weights. The default directory where model weights are stored is `~/.hanzo-live/models`.
 
 ```bash
-uv run daydream-scope
+uv run hanzo-live
 ```
 
 The application will automatically detect your hardware:
@@ -119,7 +119,7 @@ export HF_TOKEN=your_token_here
 When you start Hanzo Live, it will automatically use Cloudflare's TURN servers and you'll have 10GB of free streaming per month:
 
 ```
-uv run daydream-scope
+uv run hanzo-live
 ```
 
 ## Contributing

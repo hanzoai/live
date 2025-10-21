@@ -1,9 +1,9 @@
 """
-Models configuration module for daydream-scope.
+Models configuration module for hanzo-live.
 
 Provides centralized configuration for model storage location with support for:
-- Default location: ~/.daydream-scope/models
-- Environment variable override: DAYDREAM_MODELS_DIR
+- Default location: ~/.hanzo-live/models
+- Environment variable override: HANZO_LIVE_MODELS_DIR
 """
 
 import logging
@@ -13,10 +13,10 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 # Default models directory
-DEFAULT_MODELS_DIR = "~/.daydream-scope/models"
+DEFAULT_MODELS_DIR = "~/.hanzo-live/models"
 
 # Environment variable for overriding models directory
-MODELS_DIR_ENV_VAR = "DAYDREAM_SCOPE_MODELS_DIR"
+MODELS_DIR_ENV_VAR = "HANZO_LIVE_MODELS_DIR"
 
 
 def get_models_dir() -> Path:
@@ -24,8 +24,8 @@ def get_models_dir() -> Path:
     Get the models directory path.
 
     Priority order:
-    1. DAYDREAM_SCOPE_MODELS_DIR environment variable
-    2. Default: ~/.daydream-scope/models
+    1. HANZO_LIVE_MODELS_DIR environment variable
+    2. Default: ~/.hanzo-live/models
 
     Returns:
         Path: Absolute path to the models directory

@@ -51,7 +51,7 @@ uv run pre-commit install
 Run the server with hot reloading enabled:
 
 ```bash
-uv run daydream-scope --reload
+uv run hanzo-live --reload
 ```
 
 ## Testing Pipelines
@@ -61,7 +61,7 @@ By default, the server does not load any pipelines on startup, but you can set t
 This would load the `longlive` pipeline on startup:
 
 ```bash
-PIPELINE="longlive" uv run daydream-scope
+PIPELINE="longlive" uv run hanzo-live
 ```
 
 You can also test the `longlive` pipeline on its own:
