@@ -10,7 +10,7 @@ from .vendor.causvid.models.wan.causal_stream_inference import (
     CausalStreamInferencePipeline,
 )
 
-# https://github.com/daydreamlive/scope/blob/0cf1766186be3802bf97ce550c2c978439f22068/pipelines/streamdiffusionv2/vendor/causvid/models/wan/causal_model.py#L306
+# https://github.com/hanzoai/live/blob/0cf1766186be3802bf97ce550c2c978439f22068/pipelines/streamdiffusionv2/vendor/causvid/models/wan/causal_model.py#L306
 MAX_ROPE_FREQ_TABLE_SEQ_LEN = 1024
 CURRENT_START_RESET_RATIO = 0.5
 # The VAE compresses a pixel frame into a latent frame which consists of patches
@@ -109,7 +109,7 @@ class StreamDiffusionV2Pipeline(Pipeline):
         # current_start is used to index into this table and shifts frame_seq_length tokens forward each pipeline call
         # We need to make sure that current_start does not shift past the max sequence length of the RoPE frequency table
         # When we hit the limit we reset the caches and indices
-        # See this issue for more context https://github.com/daydreamlive/scope/issues/95
+        # See this issue for more context https://github.com/hanzoai/live/issues/95
         max_current_start = MAX_ROPE_FREQ_TABLE_SEQ_LEN * self.stream.frame_seq_length
         # We reset at whatever is smaller the theoretically max value or some % of it
         max_current_start = min(

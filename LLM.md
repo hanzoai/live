@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Daydream Scope is a real-time streaming application that combines FastAPI backend with FastRTC for WebRTC streaming and a React TypeScript frontend. The project is designed for streaming machine learning models for real-time video generation.
+Hanzo Stream is a real-time streaming application that combines FastAPI backend with FastRTC for WebRTC streaming and a React TypeScript frontend. The project is designed for streaming machine learning models for real-time video generation.
 
 ## Architecture
 

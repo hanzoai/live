@@ -54,7 +54,7 @@ export function VideoOutput({
       overlayTimeoutRef.current = setTimeout(() => {
         setShowOverlay(false);
         setIsFadingOut(false);
-      }, 400);
+      }, 400) as unknown as number;
     }
   }, [onPlayPauseToggle, remoteStream]);
 

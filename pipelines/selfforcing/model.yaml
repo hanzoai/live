@@ -1,0 +1,35 @@
+# Self-Forcing DMD Configuration
+# Based on Wan2.1-T2V-1.3B with Self-Forcing training
+
+# Model paths will be set by pipeline manager
+model_dir: ""
+checkpoint_path: ""
+text_encoder_path: ""
+
+# Video generation settings
+height: 320
+width: 576
+seed: 42
+fps: 24
+
+# Self-Forcing specific settings
+chunk_size: 16  # Number of frames to generate per chunk
+use_kv_cache: true  # Enable KV caching for faster inference
+autoregressive: true  # Enable autoregressive generation
+
+# Model architecture
+model_kwargs:
+  in_channels: 16
+  out_channels: 16
+  cross_attention_dim: 4096
+  num_layers: 28
+  attention_head_dim: 128
+  num_attention_heads: 24
+  use_linear_projection: true
+  upcast_attention: false
+
+# DMD (Distribution Matching Distillation) settings
+dmd:
+  enabled: true
+  num_inference_steps: 4  # Reduced steps for faster inference
+  guidance_scale: 7.5

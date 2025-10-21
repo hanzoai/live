@@ -59,7 +59,7 @@ export function DebouncedSlider({
 
       commitTimeoutRef.current = setTimeout(() => {
         onValueCommit(newValue);
-      }, debounceMs);
+      }, debounceMs) as unknown as number;
     }
   };
 

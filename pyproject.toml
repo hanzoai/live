@@ -56,9 +56,9 @@ daydream-scope = "app:main"
 build = "build:main"
 
 [project.urls]
-Homepage = "https://github.com/daydreamlive/scope"
-Repository = "https://github.com/daydreamlive/scope"
-Issues = "https://github.com/daydreamlive/scope/issues"
+Homepage = "https://github.com/hanzoai/live"
+Repository = "https://github.com/hanzoai/live"
+Issues = "https://github.com/hanzoai/live/issues"
 
 [tool.uv.extra-build-dependencies]
 flash-attn = [{ requirement = "torch", match-runtime = true, marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
