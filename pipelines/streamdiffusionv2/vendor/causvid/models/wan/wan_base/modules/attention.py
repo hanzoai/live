@@ -5,14 +5,16 @@ try:
     import flash_attn_interface
 
     FLASH_ATTN_3_AVAILABLE = True
-except ModuleNotFoundError:
+except Exception:
+    # Catch all exceptions - flash_attn may be installed but fail to import on non-CUDA systems
     FLASH_ATTN_3_AVAILABLE = False
 
 try:
     import flash_attn
 
     FLASH_ATTN_2_AVAILABLE = True
-except ModuleNotFoundError:
+except Exception:
+    # Catch all exceptions - flash_attn may be installed but fail to import on non-CUDA systems
     FLASH_ATTN_2_AVAILABLE = False
 
 import warnings

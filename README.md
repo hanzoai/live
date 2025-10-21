@@ -25,8 +25,20 @@ Hanzo Live currently supports the following operating systems:
 
 - Linux
 - Windows
+- macOS (Apple Silicon with MLX support)
 
-Hanzo Live currently requires a Nvidia GPU with >= 24GB VRAM. We recommend a driver that supports CUDA >= 12.8 and a RTX 3090/4090/5090 (newer generations will support higher FPS throughput and lower latency). If you do not have access to a GPU with these specs then we recommend installing on [Runpod](#runpod).
+### GPU Requirements
+
+**NVIDIA GPUs (Linux/Windows):**
+- Requires a Nvidia GPU with >= 24GB VRAM
+- We recommend a driver that supports CUDA >= 12.8
+- RTX 3090/4090/5090 recommended (newer generations will support higher FPS throughput and lower latency)
+- If you do not have access to a GPU with these specs, we recommend installing on [Runpod](#runpod)
+
+**Apple Silicon (macOS):**
+- Supported on M1/M2/M3/M4 Macs with unified memory
+- Uses MLX (Apple's machine learning framework) with Metal backend
+- Run with `--mlx` flag to enable Apple Silicon acceleration
 
 ## Install
 
@@ -56,8 +68,14 @@ uv run build
 
 This will start the server and on the first run will also download required model weights. The default directory where model weights are stored is `~/.daydream-scope/models`.
 
-```
+**For NVIDIA GPUs (Linux/Windows):**
+```bash
 uv run daydream-scope
+```
+
+**For Apple Silicon (macOS):**
+```bash
+uv run daydream-scope --mlx
 ```
 
 After the server starts up, the frontend will be available at `http://localhost:8000`.
