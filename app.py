@@ -141,32 +141,35 @@ async def lifespan(app: FastAPI):
     # Startup
     global webrtc_manager, pipeline_manager
 
-    # Check hardware availability before proceeding
+    # Check hardware availability and auto-detect appropriate backend
     cpu_mode = os.getenv("SCOPE_CPU_MODE") == "1"
-    mlx_mode = os.getenv("SCOPE_MLX_MODE") == "1"
 
-    if not torch.cuda.is_available() and not cpu_mode and not mlx_mode:
+    # Check if we have any GPU support (CUDA or MPS)
+    has_cuda = torch.cuda.is_available()
+    has_mps = platform.system() == "Darwin" and hasattr(torch.backends, "mps") and torch.backends.mps.is_available()
+
+    if not has_cuda and not has_mps and not cpu_mode:
         error_msg = (
-            "CUDA is not available on this system. "
-            "This application currently requires a CUDA-compatible GPU and "
-            "other hardware will be supported in the future. "
-            "Use --cpu flag to run in CPU-only mode or --mlx flag to use Apple Metal on macOS."
+            "No GPU detected. This application requires either:\n"
+            "  - NVIDIA GPU with CUDA (Linux/Windows)\n"
+            "  - Apple Silicon with Metal (macOS)\n"
+            "Use --cpu flag to run in CPU-only mode for testing."
         )
         logger.error(error_msg)
         sys.exit(1)
 
-    if mlx_mode:
+    if cpu_mode:
+        logger.warning("Running in CPU-only mode - performance will be limited")
+    elif has_cuda:
+        logger.info(f"Auto-detected CUDA: {torch.cuda.get_device_name(0)}")
+    elif has_mps:
         try:
             import mlx.core as mx
-            logger.info(f"Running with MLX/Metal backend (MLX version {mx.__version__})")
+            logger.info(f"Auto-detected Apple Silicon with MLX {mx.__version__}")
         except ImportError:
-            logger.warning("MLX not available, will fall back to CPU")
-    elif cpu_mode:
-        logger.warning("Running in CPU-only mode - performance will be limited")
-    elif torch.cuda.is_available():
-        logger.info(f"CUDA available: {torch.cuda.get_device_name(0)}")
+            logger.info("Auto-detected Apple Silicon with Metal backend")
     else:
-        logger.info("Using default device detection")
+        logger.info("Using CPU backend")
 
     # Download models if needed
     try:
@@ -382,12 +385,7 @@ def main():
     parser.add_argument(
         "--cpu",
         action="store_true",
-        help="Run in CPU-only mode (skip CUDA requirement check)",
-    )
-    parser.add_argument(
-        "--mlx",
-        action="store_true",
-        help="Run with MLX/Metal backend on Apple Silicon (macOS only)",
+        help="Force CPU-only mode (disable GPU acceleration)",
     )
 
     args = parser.parse_args()
@@ -395,10 +393,6 @@ def main():
     # Store CPU mode in environment for lifespan handler
     if args.cpu:
         os.environ["SCOPE_CPU_MODE"] = "1"
-
-    # Store MLX mode in environment for lifespan handler
-    if args.mlx:
-        os.environ["SCOPE_MLX_MODE"] = "1"
 
     # Handle version flag
     if args.version:

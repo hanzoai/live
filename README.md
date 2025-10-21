@@ -37,8 +37,8 @@ Hanzo Live currently supports the following operating systems:
 
 **Apple Silicon (macOS):**
 - Supported on M1/M2/M3/M4 Macs with unified memory
-- Uses MLX (Apple's machine learning framework) with Metal backend
-- Run with `--mlx` flag to enable Apple Silicon acceleration
+- Automatically uses MLX (Apple's machine learning framework) with Metal backend
+- No special flags needed - Apple Silicon acceleration is auto-detected
 
 ## Install
 
@@ -68,15 +68,14 @@ uv run build
 
 This will start the server and on the first run will also download required model weights. The default directory where model weights are stored is `~/.daydream-scope/models`.
 
-**For NVIDIA GPUs (Linux/Windows):**
 ```bash
 uv run daydream-scope
 ```
 
-**For Apple Silicon (macOS):**
-```bash
-uv run daydream-scope --mlx
-```
+The application will automatically detect your hardware:
+- **NVIDIA GPU** (Linux/Windows) → Uses CUDA acceleration
+- **Apple Silicon** (macOS) → Uses MLX/Metal acceleration
+- **CPU fallback** → Use `--cpu` flag for testing without GPU
 
 After the server starts up, the frontend will be available at `http://localhost:8000`.
 
