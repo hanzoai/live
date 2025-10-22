@@ -204,9 +204,58 @@ class WanRMSNorm(nn.Module):
         return self.weight * x_normalized
 
 
+class WanLayerNorm(nn.Module):
+    """
+    Layer Normalization compatible with PyTorch LayerNorm.
+
+    Standard layer normalization that normalizes across the feature dimension,
+    computing mean and variance statistics.
+    """
+
+    def __init__(self, dim: int, eps: float = 1e-6, elementwise_affine: bool = False):
+        """
+        Args:
+            dim: Normalized dimension
+            eps: Small constant for numerical stability
+            elementwise_affine: Whether to learn affine parameters (weight and bias)
+        """
+        super().__init__()
+        self.dim = dim
+        self.eps = eps
+        self.elementwise_affine = elementwise_affine
+
+        if elementwise_affine:
+            self.weight = mx.ones((dim,))
+            self.bias = mx.zeros((dim,))
+
+    def __call__(self, x: mx.array) -> mx.array:
+        """
+        Apply layer normalization.
+
+        Args:
+            x: Input tensor [..., dim]
+
+        Returns:
+            Normalized tensor [..., dim]
+        """
+        # Compute mean and variance across the last dimension
+        mean = mx.mean(x, axis=-1, keepdims=True)
+        variance = mx.var(x, axis=-1, keepdims=True)
+
+        # Normalize: (x - mean) / sqrt(variance + eps)
+        x_normalized = (x - mean) * mx.rsqrt(variance + self.eps)
+
+        # Apply learned affine transformation if enabled
+        if self.elementwise_affine:
+            x_normalized = x_normalized * self.weight + self.bias
+
+        return x_normalized
+
+
 __all__ = [
     "sinusoidal_embedding_1d",
     "rope_params",
     "rope_apply",
     "WanRMSNorm",
+    "WanLayerNorm",
 ]
