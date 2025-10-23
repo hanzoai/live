@@ -132,9 +132,9 @@ def rope_apply(
         # For now, we'll use a simpler approach that matches the semantics
 
         # Reshape frequencies to match the grid structure
-        freq_f_expanded = mx.reshape(freq_f, (f, 1, 1, -1, 2)).broadcast_to((f, h, w, split_sizes[0], 2))
-        freq_h_expanded = mx.reshape(freq_h, (1, h, 1, -1, 2)).broadcast_to((f, h, w, split_sizes[1], 2))
-        freq_w_expanded = mx.reshape(freq_w, (1, 1, w, -1, 2)).broadcast_to((f, h, w, split_sizes[2], 2))
+        freq_f_expanded = mx.broadcast_to(mx.reshape(freq_f, (f, 1, 1, -1, 2)), (f, h, w, split_sizes[0], 2))
+        freq_h_expanded = mx.broadcast_to(mx.reshape(freq_h, (1, h, 1, -1, 2)), (f, h, w, split_sizes[1], 2))
+        freq_w_expanded = mx.broadcast_to(mx.reshape(freq_w, (1, 1, w, -1, 2)), (f, h, w, split_sizes[2], 2))
 
         # Concatenate along frequency dimension
         freqs_i = mx.concatenate([freq_f_expanded, freq_h_expanded, freq_w_expanded], axis=3)
