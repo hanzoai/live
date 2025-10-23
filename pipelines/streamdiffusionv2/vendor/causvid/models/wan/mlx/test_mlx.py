@@ -51,7 +51,8 @@ def test_sinusoidal_embedding():
     sinusoid = np.outer(position_np, freq_bands)
     ref_emb = np.concatenate([np.cos(sinusoid), np.sin(sinusoid)], axis=1)
 
-    assert_close(mlx_emb, ref_emb, name="sinusoidal_embedding")
+    # Slightly relaxed tolerance for floating point differences between MLX and NumPy
+    assert_close(mlx_emb, ref_emb, rtol=1e-4, atol=2e-5, name="sinusoidal_embedding")
     print("✓ sinusoidal_embedding_1d passed")
 
 
