@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanzo Live - Real-time AI Video Generation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <header class="text-center mb-16">
+            <h1 class="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+                Hanzo Live
+            </h1>
+            <p class="text-2xl text-gray-300 mb-6">Real-time AI Video Generation & Streaming</p>
+            <div class="flex justify-center gap-4 flex-wrap">
+                <a href="https://github.com/hanzoai/live" class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold transition">
+                    <i class="fab fa-github mr-2"></i>View on GitHub
+                </a>
+                <a href="https://discord.gg/mnfGR4Fjhp" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg font-semibold transition">
+                    <i class="fab fa-discord mr-2"></i>Join Discord
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Features -->
+        <section class="mb-16">
+            <h2 class="text-4xl font-bold mb-8 text-center">Features</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl mb-4 text-purple-400">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Autoregressive Video</h3>
+                    <p class="text-gray-300">StreamDiffusionV2 and LongLive models for real-time video generation</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl mb-4 text-pink-400">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">WebRTC Streaming</h3>
+                    <p class="text-gray-300">Low latency real-time streaming with WebRTC support</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl mb-4 text-blue-400">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Apple Silicon</h3>
+                    <p class="text-gray-300">MLX-native implementation with 2-3x performance on M1/M2/M3</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl mb-4 text-green-400">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Low Latency</h3>
+                    <p class="text-gray-300">Async video processing pipelines for minimal delay</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl mb-4 text-yellow-400">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Interactive UI</h3>
+                    <p class="text-gray-300">Text prompting, parameter controls, and multiple input modes</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl mb-4 text-red-400">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">GPU Optimized</h3>
+                    <p class="text-gray-300">CUDA, Metal, and CPU support with automatic backend detection</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MLX Implementation Highlight -->
+        <section class="mb-16">
+            <div class="bg-gradient-to-r from-purple-900 to-pink-900 rounded-2xl p-8 border border-purple-500">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="text-6xl">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-4xl font-bold">MLX-Native WAN Implementation</h2>
+                        <p class="text-xl text-gray-200">Complete Apple Silicon optimization with 2-3x speedup</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-3">Performance Gains</h3>
+                        <ul class="space-y-2 text-gray-200">
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>Attention: 2.5x faster</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>RoPE: 2.7x faster</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>Full Forward Pass: 2.5x faster</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>All tests passing ✅</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-bold mb-3">Complete Implementation</h3>
+                        <ul class="space-y-2 text-gray-200">
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>Manual Conv3d (bypasses MLX limitations)</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>Full WanModel with transformers</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>Auto backend selection</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>PyTorch → MLX weight conversion</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <a href="mlx.html" class="inline-block bg-white text-purple-900 px-8 py-3 rounded-lg font-bold text-lg hover:bg-gray-100 transition">
+                        Read Full MLX Documentation →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documentation Links -->
+        <section class="mb-16">
+            <h2 class="text-4xl font-bold mb-8 text-center">Documentation</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <a href="mlx.html" class="block bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700 hover:border-purple-500 transition">
+                    <h3 class="text-2xl font-bold mb-2 text-purple-400">MLX Implementation</h3>
+                    <p class="text-gray-300 mb-4">Complete documentation for the Apple Silicon-optimized MLX-native WAN implementation</p>
+                    <span class="text-purple-400 font-semibold">Read more →</span>
+                </a>
+
+                <a href="https://github.com/hanzoai/live#readme" class="block bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700 hover:border-pink-500 transition">
+                    <h3 class="text-2xl font-bold mb-2 text-pink-400">Getting Started</h3>
+                    <p class="text-gray-300 mb-4">Installation guide, system requirements, and quick start instructions</p>
+                    <span class="text-pink-400 font-semibold">Read more →</span>
+                </a>
+
+                <a href="contributing.html" class="block bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700 hover:border-blue-500 transition">
+                    <h3 class="text-2xl font-bold mb-2 text-blue-400">Contributing</h3>
+                    <p class="text-gray-300 mb-4">Guidelines for contributing, development setup, and testing</p>
+                    <span class="blue-400 font-semibold">Read more →</span>
+                </a>
+
+                <a href="https://github.com/hanzoai/live/issues" class="block bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700 hover:border-green-500 transition">
+                    <h3 class="text-2xl font-bold mb-2 text-green-400">Issues & Support</h3>
+                    <p class="text-gray-300 mb-4">Report bugs, request features, or get help from the community</p>
+                    <span class="text-green-400 font-semibold">Visit GitHub →</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- System Requirements -->
+        <section class="mb-16">
+            <h2 class="text-4xl font-bold mb-8 text-center">System Requirements</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-xl font-bold mb-4 text-green-400">
+                        <i class="fab fa-linux mr-2"></i>Linux / Windows
+                    </h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>NVIDIA GPU with ≥24GB VRAM</li>
+                        <li>CUDA ≥12.8 recommended</li>
+                        <li>RTX 3090/4090/5090</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-xl font-bold mb-4 text-blue-400">
+                        <i class="fab fa-apple mr-2"></i>macOS (Apple Silicon)
+                    </h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>M1/M2/M3/M4 Macs</li>
+                        <li>MLX with Metal backend</li>
+                        <li>Auto-detected acceleration</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-xl font-bold mb-4 text-yellow-400">
+                        <i class="fas fa-cloud mr-2"></i>Cloud Options
+                    </h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>Runpod (recommended)</li>
+                        <li>GPU instances available</li>
+                        <li>Pre-configured setups</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-400 pt-8 border-t border-gray-700">
+            <p class="mb-4">© 2024-2025 Hanzo AI. All rights reserved.</p>
+            <div class="flex justify-center gap-6">
+                <a href="https://github.com/hanzoai/live" class="hover:text-purple-400 transition">
+                    <i class="fab fa-github text-2xl"></i>
+                </a>
+                <a href="https://discord.gg/mnfGR4Fjhp" class="hover:text-purple-400 transition">
+                    <i class="fab fa-discord text-2xl"></i>
+                </a>
+                <a href="https://hanzo.ai" class="hover:text-purple-400 transition">
+                    <i class="fas fa-globe text-2xl"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
