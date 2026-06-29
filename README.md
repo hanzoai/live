@@ -1,3 +1,5 @@
+<p align="center"><img src=".github/hero.svg" alt="live" width="880"></p>
+
 # Hanzo Live
 
 [![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/mnfGR4Fjhp)
