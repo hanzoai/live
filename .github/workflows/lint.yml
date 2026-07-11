@@ -8,7 +8,7 @@ on:
 
 jobs:
   python-lint:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     name: Python Linting (Ruff)
 
     steps:
@@ -35,7 +35,7 @@ jobs:
         run: uv run ruff format --check .
 
   frontend-lint:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     name: Frontend Linting (ESLint + Prettier)
 
     steps:
