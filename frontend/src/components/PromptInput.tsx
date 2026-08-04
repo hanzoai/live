@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { ArrowUp } from "lucide-react";
+import { Button, Input } from "@hanzo/ui";
+import { ArrowUp } from "@hanzogui/lucide-icons-2";
 
 interface PromptInputProps {
-  className?: string;
   currentPrompt: string;
   onPromptChange?: (prompt: string) => void;
   onPromptSubmit?: (prompt: string) => void;
@@ -12,7 +10,6 @@ interface PromptInputProps {
 }
 
 export function PromptInput({
-  className = "",
   currentPrompt,
   onPromptChange,
   onPromptSubmit,
@@ -24,43 +21,32 @@ export function PromptInput({
     if (!currentPrompt.trim()) return;
 
     setIsProcessing(true);
-
-    // Send the prompt update via data channel
-    if (onPromptSubmit) {
-      onPromptSubmit(currentPrompt.trim());
-    }
-
-    // Reset processing state after a short delay
-    setTimeout(() => {
-      setIsProcessing(false);
-    }, 1000);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSubmit();
-    }
+    onPromptSubmit?.(currentPrompt.trim());
+    setTimeout(() => setIsProcessing(false), 1000);
   };
 
   return (
-    <div
-      className={`flex items-center bg-card border border-border rounded-full px-4 py-3 gap-3 ${className}`}
-    >
-      <Input
-        placeholder="blooming flowers"
-        value={currentPrompt}
-        onChange={e => onPromptChange?.(e.target.value)}
-        onKeyPress={handleKeyPress}
-        disabled={disabled}
-        className="flex-1 bg-transparent border-0 text-card-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0 p-0 disabled:opacity-50 disabled:cursor-not-allowed"
-      />
+    <div className="app-prompt">
+      <div className="app-prompt-field">
+        <Input
+          placeholder="blooming flowers"
+          value={currentPrompt}
+          onChangeText={text => onPromptChange?.(text)}
+          onKeyPress={e => {
+            if ((e as unknown as React.KeyboardEvent).key === "Enter")
+              handleSubmit();
+          }}
+          disabled={disabled}
+          borderWidth={0}
+        />
+      </div>
       <Button
-        onClick={handleSubmit}
+        onPress={handleSubmit}
         disabled={disabled || !currentPrompt.trim() || isProcessing}
-        size="sm"
-        className="rounded-full w-8 h-8 p-0 bg-black hover:bg-gray-800 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+        size="icon-sm"
+        rounded={9999}
       >
-        {isProcessing ? "..." : <ArrowUp className="h-4 w-4" />}
+        {isProcessing ? "..." : <ArrowUp size={16} />}
       </Button>
     </div>
   );

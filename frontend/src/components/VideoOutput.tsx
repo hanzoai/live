@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Card, CardContent } from "./ui/card";
-import { Spinner } from "./ui/spinner";
-import { Pause, Play } from "lucide-react";
+import { Card, CardContent } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
+import { Pause, Play } from "@hanzogui/lucide-icons-2";
 
 interface VideoOutputProps {
-  className?: string;
   remoteStream: MediaStream | null;
   isPipelineLoading?: boolean;
   isConnecting?: boolean;
@@ -14,7 +13,6 @@ interface VideoOutputProps {
 }
 
 export function VideoOutput({
-  className = "",
   remoteStream,
   isPipelineLoading = false,
   isConnecting = false,
@@ -34,124 +32,98 @@ export function VideoOutput({
   }, [remoteStream]);
 
   const triggerPlayPause = useCallback(() => {
-    if (onPlayPauseToggle && remoteStream) {
-      onPlayPauseToggle();
+    if (!onPlayPauseToggle || !remoteStream) return;
 
-      // Show overlay and immediately start fade out animation
-      setShowOverlay(true);
-      setIsFadingOut(false);
+    onPlayPauseToggle();
 
-      if (overlayTimeoutRef.current) {
-        clearTimeout(overlayTimeoutRef.current);
-      }
+    // Show overlay and immediately start fade out animation
+    setShowOverlay(true);
+    setIsFadingOut(false);
 
-      // Start fade out immediately (CSS transition handles the timing)
-      requestAnimationFrame(() => {
-        setIsFadingOut(true);
-      });
-
-      // Remove overlay after animation completes (400ms transition)
-      overlayTimeoutRef.current = setTimeout(() => {
-        setShowOverlay(false);
-        setIsFadingOut(false);
-      }, 400) as unknown as number;
+    if (overlayTimeoutRef.current) {
+      clearTimeout(overlayTimeoutRef.current);
     }
-  }, [onPlayPauseToggle, remoteStream]);
 
-  const handleVideoClick = () => {
-    triggerPlayPause();
-  };
+    // Start fade out immediately (CSS transition handles the timing)
+    requestAnimationFrame(() => setIsFadingOut(true));
+
+    // Remove overlay after animation completes (400ms transition)
+    overlayTimeoutRef.current = setTimeout(() => {
+      setShowOverlay(false);
+      setIsFadingOut(false);
+    }, 400) as unknown as number;
+  }, [onPlayPauseToggle, remoteStream]);
 
   // Handle spacebar press for play/pause
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Only trigger if spacebar is pressed and stream is active
-      if (e.code === "Space" && remoteStream) {
-        // Don't trigger if user is typing in an input/textarea/select or any contenteditable element
-        const target = e.target as HTMLElement;
-        const isInputFocused =
-          target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.tagName === "SELECT" ||
-          target.isContentEditable;
+      if (e.code !== "Space" || !remoteStream) return;
 
-        if (!isInputFocused) {
-          // Prevent default spacebar behavior (page scroll)
-          e.preventDefault();
-          triggerPlayPause();
-        }
+      // Don't trigger if user is typing in an input/textarea/select or any contenteditable element
+      const target = e.target as HTMLElement;
+      const isInputFocused =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable;
+
+      if (!isInputFocused) {
+        // Prevent default spacebar behavior (page scroll)
+        e.preventDefault();
+        triggerPlayPause();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [remoteStream, triggerPlayPause]);
 
   // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (overlayTimeoutRef.current) {
-        clearTimeout(overlayTimeoutRef.current);
-      }
-    };
-  }, []);
+  useEffect(
+    () => () => {
+      if (overlayTimeoutRef.current) clearTimeout(overlayTimeoutRef.current);
+    },
+    []
+  );
 
   return (
-    <Card className={`h-full flex flex-col ${className}`}>
-      <CardContent className="flex-1 flex items-center justify-center min-h-0">
-        {remoteStream ? (
-          <div
-            className="relative max-w-full max-h-full cursor-pointer"
-            onClick={handleVideoClick}
-          >
-            <video
-              ref={videoRef}
-              className="max-w-full max-h-full object-contain"
-              autoPlay
-              muted
-              playsInline
-            />
-            {/* Play/Pause Overlay */}
-            {showOverlay && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div
-                  className={`bg-black/50 rounded-full p-4 transition-all duration-400 ${
-                    isFadingOut
-                      ? "opacity-0 scale-150"
-                      : "opacity-100 scale-100"
-                  }`}
-                >
-                  {isPlaying ? (
-                    <Play className="w-12 h-12 text-white" />
-                  ) : (
-                    <Pause className="w-12 h-12 text-white" />
-                  )}
+    <Card height="100%" flex={1}>
+      <CardContent flex={1} minH={0}>
+        <div className="app-stage-body">
+          {remoteStream ? (
+            <div className="app-video-frame" onClick={triggerPlayPause}>
+              <video
+                ref={videoRef}
+                className="app-video"
+                autoPlay
+                muted
+                playsInline
+              />
+              {showOverlay && (
+                <div className="app-video-overlay">
+                  <div
+                    className="app-video-badge"
+                    data-fading={isFadingOut ? "true" : "false"}
+                  >
+                    {isPlaying ? <Play size={48} /> : <Pause size={48} />}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ) : pipelineError ? (
-          <div className="text-center text-red-500 text-lg">
-            <p>Pipeline Error</p>
-            <p className="text-sm mt-2 max-w-md mx-auto">{pipelineError}</p>
-          </div>
-        ) : isPipelineLoading ? (
-          <div className="text-center text-muted-foreground text-lg">
-            <Spinner size={24} className="mx-auto mb-3" />
-            <p>Loading pipeline...</p>
-          </div>
-        ) : isConnecting ? (
-          <div className="text-center text-muted-foreground text-lg">
-            <Spinner size={24} className="mx-auto mb-3" />
-            <p>Connecting...</p>
-          </div>
-        ) : (
-          <div className="text-center text-muted-foreground text-lg">
-            Click "Start" when you are ready
-          </div>
-        )}
+              )}
+            </div>
+          ) : pipelineError ? (
+            <div className="app-notice app-notice--error">
+              <p>Pipeline Error</p>
+              <p>{pipelineError}</p>
+            </div>
+          ) : isPipelineLoading || isConnecting ? (
+            <div className="app-notice">
+              <Spinner size="small" />
+              <p>{isPipelineLoading ? "Loading pipeline…" : "Connecting…"}</p>
+            </div>
+          ) : (
+            <div className="app-notice">Click "Start" when you are ready</div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

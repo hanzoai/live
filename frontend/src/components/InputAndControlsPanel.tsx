@@ -1,19 +1,22 @@
 import { useEffect, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Button } from "./ui/button";
-import { Play, Square, Loader2, Upload } from "lucide-react";
+} from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
+import { Play, Square, Upload } from "@hanzogui/lucide-icons-2";
 import type { VideoSourceMode } from "../hooks/useVideoSource";
 import { PIPELINES } from "../data/pipelines";
 
 interface InputAndControlsPanelProps {
-  className?: string;
   localStream: MediaStream | null;
   isInitializing: boolean;
   error: string | null;
@@ -30,7 +33,6 @@ interface InputAndControlsPanelProps {
 }
 
 export function InputAndControlsPanel({
-  className = "",
   localStream,
   isInitializing,
   error,
@@ -47,22 +49,15 @@ export function InputAndControlsPanel({
 }: InputAndControlsPanelProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Get pipeline category, deafault to video-input
+  // Get pipeline category, default to video-input
   const pipelineCategory = PIPELINES[pipelineId]?.category || "video-input";
+  const busy = isPipelineLoading || isConnecting;
 
   useEffect(() => {
     if (videoRef.current && localStream) {
       videoRef.current.srcObject = localStream;
     }
   }, [localStream]);
-
-  const handleStreamClick = () => {
-    if (isStreaming) {
-      onStopStream();
-    } else {
-      onStartStream();
-    }
-  };
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -71,8 +66,8 @@ export function InputAndControlsPanel({
     if (file && onVideoFileUpload) {
       try {
         await onVideoFileUpload(file);
-      } catch (error) {
-        console.error("Video upload failed:", error);
+      } catch (uploadError) {
+        console.error("Video upload failed:", uploadError);
       }
     }
     // Reset the input value so the same file can be selected again
@@ -80,126 +75,107 @@ export function InputAndControlsPanel({
   };
 
   return (
-    <Card className={`h-full ${className}`}>
+    <Card height="100%">
       <CardHeader>
-        <CardTitle className="text-base font-medium">
-          Input & Controls
-        </CardTitle>
+        <CardTitle>Input &amp; Controls</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <h3 className="text-sm font-medium mb-2">Mode</h3>
-          <Select
-            value={pipelineCategory === "video-input" ? mode : "text"}
-            onValueChange={value => {
-              if (pipelineCategory === "video-input" && value) {
-                onModeChange(value as VideoSourceMode);
-              }
-            }}
-            disabled={isStreaming}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {pipelineCategory === "video-input" ? (
-                <>
-                  <SelectItem value="video">Video</SelectItem>
-                  <SelectItem value="camera">Camera</SelectItem>
-                </>
-              ) : (
-                <SelectItem value="text">Text</SelectItem>
-              )}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {pipelineCategory === "video-input" && (
-          <div>
-            <h3 className="text-sm font-medium mb-2">Input</h3>
-            <div className="rounded-lg flex items-center justify-center bg-muted/10 overflow-hidden relative">
-              {isInitializing ? (
-                <div className="text-center text-muted-foreground text-sm">
-                  {mode === "camera"
-                    ? "Requesting camera access..."
-                    : "Initializing video..."}
-                </div>
-              ) : error ? (
-                <div className="text-center text-red-500 text-sm p-4">
-                  <p>
-                    {mode === "camera"
-                      ? "Camera access failed:"
-                      : "Video error:"}
-                  </p>
-                  <p className="text-xs mt-1">{error}</p>
-                </div>
-              ) : localStream ? (
-                <video
-                  ref={videoRef}
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  playsInline
-                />
-              ) : (
-                <div className="text-center text-muted-foreground text-sm">
-                  {mode === "camera" ? "Camera Preview" : "Video Preview"}
-                </div>
-              )}
-
-              {/* Upload button - only show in video mode */}
-              {mode === "video" && onVideoFileUpload && (
-                <>
-                  <input
-                    type="file"
-                    accept="video/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="video-upload"
-                    disabled={isStreaming || isConnecting}
-                  />
-                  <label
-                    htmlFor="video-upload"
-                    className={`absolute bottom-2 right-2 p-2 rounded-full bg-black/50 transition-colors ${
-                      isStreaming || isConnecting
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-black/70 cursor-pointer"
-                    }`}
-                  >
-                    <Upload className="h-4 w-4 text-white" />
-                  </label>
-                </>
-              )}
-            </div>
+      <CardContent>
+        <div className="app-stack app-stack--lg">
+          <div className="app-stack">
+            <h3 className="app-section-title">Mode</h3>
+            <Select
+              value={pipelineCategory === "video-input" ? mode : "text"}
+              onValueChange={value => {
+                if (pipelineCategory === "video-input" && value) {
+                  onModeChange(value as VideoSourceMode);
+                }
+              }}
+            >
+              <SelectTrigger disabled={isStreaming}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {pipelineCategory === "video-input" ? (
+                  <>
+                    <SelectItem value="video">Video</SelectItem>
+                    <SelectItem value="camera">Camera</SelectItem>
+                  </>
+                ) : (
+                  <SelectItem value="text">Text</SelectItem>
+                )}
+              </SelectContent>
+            </Select>
           </div>
-        )}
 
-        <div>
-          <h3 className="text-sm font-medium mb-2">Controls</h3>
-          <div className="flex flex-wrap gap-2 min-w-0">
+          {pipelineCategory === "video-input" && (
+            <div className="app-stack">
+              <h3 className="app-section-title">Input</h3>
+              <div className="app-preview">
+                {isInitializing ? (
+                  <div className="app-preview-note">
+                    {mode === "camera"
+                      ? "Requesting camera access…"
+                      : "Initializing video…"}
+                  </div>
+                ) : error ? (
+                  <div className="app-preview-note app-preview-note--error">
+                    <p>
+                      {mode === "camera"
+                        ? "Camera access failed:"
+                        : "Video error:"}
+                    </p>
+                    <p>{error}</p>
+                  </div>
+                ) : localStream ? (
+                  <video ref={videoRef} autoPlay muted playsInline />
+                ) : (
+                  <div className="app-preview-note">
+                    {mode === "camera" ? "Camera Preview" : "Video Preview"}
+                  </div>
+                )}
+
+                {mode === "video" && onVideoFileUpload && (
+                  <>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={handleFileUpload}
+                      className="app-upload-input"
+                      id="video-upload"
+                      disabled={isStreaming || isConnecting}
+                    />
+                    <label
+                      htmlFor="video-upload"
+                      className="app-upload"
+                      data-disabled={
+                        isStreaming || isConnecting ? "true" : "false"
+                      }
+                    >
+                      <Upload size={16} />
+                    </label>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="app-stack">
+            <h3 className="app-section-title">Controls</h3>
             <Button
-              onClick={handleStreamClick}
+              onPress={isStreaming ? onStopStream : onStartStream}
               variant={isStreaming ? "destructive" : "default"}
               size="sm"
-              disabled={
-                isPipelineLoading ||
-                isConnecting ||
-                (!canStartStream && !isStreaming)
-              }
-              className="w-full gap-2"
+              width="100%"
+              disabled={busy || (!canStartStream && !isStreaming)}
             >
-              {isPipelineLoading || isConnecting ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+              {busy ? (
+                <Spinner size="small" />
               ) : isStreaming ? (
-                <Square className="h-4 w-4" />
+                <Square size={16} />
               ) : (
-                <Play className="h-4 w-4" />
+                <Play size={16} />
               )}
-              {isPipelineLoading || isConnecting
-                ? ""
-                : isStreaming
-                  ? "Stop"
-                  : "Start"}
+              {busy ? "" : isStreaming ? "Stop" : "Start"}
             </Button>
           </div>
         </div>

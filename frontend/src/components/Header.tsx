@@ -1,52 +1,38 @@
-import { BookOpenText } from "lucide-react";
+import { BookOpenText } from "@hanzogui/lucide-icons-2";
 import { HanzoLogo } from "@hanzo/logo/react";
 
-interface HeaderProps {
-  className?: string;
-}
-
-export function Header({ className = "" }: HeaderProps) {
+export function Header() {
   return (
-    <header className={`w-full bg-background px-6 py-4 ${className}`}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <HanzoLogo variant="white" size={32} />
-          <h1 className="text-xl font-medium text-foreground">Hanzo Live</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <a
-            href="https://github.com/hanzoai/live"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity"
-          >
-            <img
-              src="/assets/github-mark-white.svg"
-              alt="GitHub"
-              className="h-5 w-5 opacity-60"
-            />
-          </a>
-          <a
-            href="https://discord.gg/mnfGR4Fjhp"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity"
-          >
-            <img
-              src="/assets/discord-symbol-white.svg"
-              alt="Discord"
-              className="h-5 w-5 opacity-60"
-            />
-          </a>
-          <a
-            href="https://docs.daydream.live/knowledge-hub/research-references/about-video-and-world-models"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity"
-          >
-            <BookOpenText className="h-5 w-5 text-muted-foreground opacity-60" />
-          </a>
-        </div>
+    <header className="app-header">
+      <div className="app-header-group">
+        <HanzoLogo variant="white" size={32} />
+        <h1 className="app-title">Hanzo Live</h1>
+      </div>
+      <div className="app-header-group">
+        <a
+          href="https://github.com/hanzoai/live"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="app-link"
+        >
+          <img src="/assets/github-mark-white.svg" alt="GitHub" />
+        </a>
+        <a
+          href="https://discord.gg/mnfGR4Fjhp"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="app-link"
+        >
+          <img src="/assets/discord-symbol-white.svg" alt="Discord" />
+        </a>
+        <a
+          href="https://docs.daydream.live/knowledge-hub/research-references/about-video-and-world-models"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="app-link"
+        >
+          <BookOpenText size={20} />
+        </a>
       </div>
     </header>
   );
