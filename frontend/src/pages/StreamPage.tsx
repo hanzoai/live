@@ -296,16 +296,15 @@ export function StreamPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="app-shell">
       {/* Header */}
       <Header />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex gap-4 px-4 pb-4 pt-2 min-h-0 overflow-hidden">
+      <div className="app-main">
         {/* Left Panel - Input & Controls */}
-        <div className="w-1/5">
+        <div className="app-side">
           <InputAndControlsPanel
-            className="h-full"
             localStream={localStream}
             isInitializing={isInitializing}
             error={videoSourceError}
@@ -327,10 +326,9 @@ export function StreamPage() {
         </div>
 
         {/* Center Panel - Video Output + Prompt */}
-        <div className="flex-1 flex flex-col">
-          <div className="flex-1">
+        <div className="app-center">
+          <div className="app-stage">
             <VideoOutput
-              className="h-full"
               remoteStream={remoteStream}
               isPipelineLoading={isPipelineLoading}
               isConnecting={isConnecting}
@@ -339,7 +337,7 @@ export function StreamPage() {
               onPlayPauseToggle={handlePlayPauseToggle}
             />
           </div>
-          <div className="mx-24 mt-4">
+          <div className="app-dock">
             <PromptInput
               currentPrompt={currentPrompts[0] || ""}
               onPromptChange={handlePromptChange}
@@ -353,9 +351,8 @@ export function StreamPage() {
         </div>
 
         {/* Right Panel - Settings */}
-        <div className="w-1/5">
+        <div className="app-side">
           <SettingsPanel
-            className="h-full"
             pipelineId={settings.pipelineId}
             onPipelineIdChange={handlePipelineIdChange}
             isStreaming={isStreaming}

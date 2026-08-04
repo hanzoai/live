@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Slider } from "./slider";
+import { Slider } from "@hanzo/ui";
 
 interface DebouncedSliderProps {
   value: number[];
@@ -9,15 +9,13 @@ interface DebouncedSliderProps {
   max?: number;
   step?: number;
   disabled?: boolean;
-  className?: string;
   debounceMs?: number;
 }
 
 /**
- * A slider component that debounces value changes.
- * - Updates local state immediately for smooth UI feedback
- * - Calls onValueChange immediately for display updates
- * - Calls onValueCommit with a debounce delay for expensive operations (e.g., API calls)
+ * A slider that debounces the expensive half of its output.
+ * `onValueChange` fires immediately so the UI tracks the thumb;
+ * `onValueCommit` fires once the drag settles, for the API call.
  */
 export function DebouncedSlider({
   value,
@@ -27,40 +25,32 @@ export function DebouncedSlider({
   max = 100,
   step = 1,
   disabled = false,
-  className = "",
   debounceMs = 100,
 }: DebouncedSliderProps) {
   const [localValue, setLocalValue] = useState<number[]>(value);
   const commitTimeoutRef = useRef<number | null>(null);
 
-  // Sync with external value changes
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (commitTimeoutRef.current) {
-        clearTimeout(commitTimeoutRef.current);
-      }
-    };
-  }, []);
+  useEffect(
+    () => () => {
+      if (commitTimeoutRef.current) clearTimeout(commitTimeoutRef.current);
+    },
+    []
+  );
 
   const handleValueChange = (newValue: number[]) => {
     setLocalValue(newValue);
     onValueChange(newValue);
 
-    // Debounce the commit callback
-    if (onValueCommit) {
-      if (commitTimeoutRef.current) {
-        clearTimeout(commitTimeoutRef.current);
-      }
-
-      commitTimeoutRef.current = setTimeout(() => {
-        onValueCommit(newValue);
-      }, debounceMs) as unknown as number;
-    }
+    if (!onValueCommit) return;
+    if (commitTimeoutRef.current) clearTimeout(commitTimeoutRef.current);
+    commitTimeoutRef.current = setTimeout(
+      () => onValueCommit(newValue),
+      debounceMs
+    ) as unknown as number;
   };
 
   return (
@@ -71,7 +61,6 @@ export function DebouncedSlider({
       max={max}
       step={step}
       disabled={disabled}
-      className={className}
     />
   );
 }

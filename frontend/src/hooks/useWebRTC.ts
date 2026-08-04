@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { sendWebRTCOffer } from "../lib/api";
-import { toast } from "sonner";
+import { toast } from "@hanzo/ui";
 
 interface InitialParameters {
   prompts?: string[];

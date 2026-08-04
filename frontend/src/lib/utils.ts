@@ -1,10 +1,4 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 import type { PipelineId } from "../types";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 export function getDefaultDenoisingSteps(pipelineId: PipelineId): number[] {
   if (pipelineId === "longlive") {

@@ -1,13 +1,15 @@
+import { GuiProvider } from "@hanzo/gui";
+import { Toaster } from "@hanzo/ui";
+import config from "@hanzo/ui/gui-config";
 import { StreamPage } from "./pages/StreamPage";
-import { Toaster } from "./components/ui/sonner";
 import "./index.css";
 
 function App() {
   return (
-    <>
+    <GuiProvider config={config} defaultTheme="dark">
       <StreamPage />
       <Toaster />
-    </>
+    </GuiProvider>
   );
 }
 

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
-import { SliderWithInput } from "./ui/slider-with-input";
-import { LabelWithTooltip } from "./ui/label-with-tooltip";
-import { Plus, Minus } from "lucide-react";
+import { Button } from "@hanzo/ui";
+import { Plus, Minus } from "@hanzogui/lucide-icons-2";
+import { SliderWithInput } from "./SliderWithInput";
+import { LabelWithTooltip } from "./LabelWithTooltip";
 
 interface DenoisingStepsSliderProps {
-  className?: string;
   value: number[];
   onChange: (value: number[]) => void;
   disabled?: boolean;
@@ -20,7 +19,6 @@ const MAX_VALUE = 1000;
 const DEFAULT_VALUES = [700, 500];
 
 export function DenoisingStepsSlider({
-  className = "",
   value,
   onChange,
   disabled = false,
@@ -75,16 +73,16 @@ export function DenoisingStepsSlider({
 
     if (!error) {
       setLocalValue(updatedValue);
-    } else {
-      const boundaryValue = calculateBoundaryValue(index, newValue);
-      const clampedValue = Math.max(
-        MIN_VALUE,
-        Math.min(MAX_VALUE, boundaryValue)
-      );
-      const boundedValue = [...localValue];
-      boundedValue[index] = clampedValue;
-      setLocalValue(boundedValue);
+      return;
     }
+
+    const boundaryValue = calculateBoundaryValue(index, newValue);
+    const boundedValue = [...localValue];
+    boundedValue[index] = Math.max(
+      MIN_VALUE,
+      Math.min(MAX_VALUE, boundaryValue)
+    );
+    setLocalValue(boundedValue);
   };
 
   const handleStepCommit = (index: number, newValue: number) => {
@@ -93,35 +91,24 @@ export function DenoisingStepsSlider({
     onChange(updatedValue);
   };
 
+  const commit = (updatedValue: number[]) => {
+    const error = validateSteps(updatedValue);
+    setValidationError(error);
+    if (error) return;
+    setLocalValue(updatedValue);
+    onChange(updatedValue);
+  };
+
   const addSlider = () => {
-    if (localValue.length < MAX_SLIDERS) {
-      // Add a new slider with a value lower than the last one
-      const lastValue = localValue[localValue.length - 1];
-      const newValue = Math.max(MIN_VALUE, lastValue - 100);
-      const updatedValue = [...localValue, newValue];
-
-      const error = validateSteps(updatedValue);
-      setValidationError(error);
-
-      if (!error) {
-        setLocalValue(updatedValue);
-        onChange(updatedValue);
-      }
-    }
+    if (localValue.length >= MAX_SLIDERS) return;
+    // Add a new slider with a value lower than the last one
+    const lastValue = localValue[localValue.length - 1];
+    commit([...localValue, Math.max(MIN_VALUE, lastValue - 100)]);
   };
 
   const removeSlider = (index: number) => {
-    if (localValue.length > MIN_SLIDERS) {
-      const updatedValue = localValue.filter((_, i) => i !== index);
-
-      const error = validateSteps(updatedValue);
-      setValidationError(error);
-
-      if (!error) {
-        setLocalValue(updatedValue);
-        onChange(updatedValue);
-      }
-    }
+    if (localValue.length <= MIN_SLIDERS) return;
+    commit(localValue.filter((_, i) => i !== index));
   };
 
   const resetToDefaults = () => {
@@ -131,71 +118,58 @@ export function DenoisingStepsSlider({
   };
 
   return (
-    <div className={`space-y-2 ${className}`}>
-      <div className="flex items-center justify-between">
-        <LabelWithTooltip
-          label="Denoising Step List"
-          tooltip={tooltip}
-          className="text-sm text-foreground"
-        />
-        <div className="flex items-center gap-2">
+    <div className="app-stack">
+      <div className="app-row app-row--between">
+        <LabelWithTooltip label="Denoising Step List" tooltip={tooltip} />
+        <div className="app-row">
           <Button
             variant="outline"
             size="sm"
-            onClick={resetToDefaults}
+            onPress={resetToDefaults}
             disabled={disabled}
-            className="h-7 px-2 text-xs"
           >
             Reset
           </Button>
           <Button
             variant="outline"
-            size="sm"
-            onClick={addSlider}
+            size="icon-sm"
+            onPress={addSlider}
             disabled={disabled || localValue.length >= MAX_SLIDERS}
-            className="h-7 w-7 p-0"
           >
-            <Plus className="h-3 w-3" />
+            <Plus size={12} />
           </Button>
         </div>
       </div>
 
-      {validationError && (
-        <div className="flex items-center gap-2 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
-          <span>{validationError}</span>
-        </div>
-      )}
+      {validationError && <div className="app-alert">{validationError}</div>}
 
-      <div className="space-y-3">
-        {localValue.map((stepValue, index) => (
-          <SliderWithInput
-            key={index}
-            label={`Step ${index + 1}:`}
-            value={stepValue}
-            onValueChange={value => handleStepValueChange(index, value)}
-            onValueCommit={value => handleStepCommit(index, value)}
-            min={MIN_VALUE}
-            max={MAX_VALUE}
-            step={1}
-            incrementAmount={1}
-            disabled={disabled}
-            inputParser={v => parseInt(v) || MIN_VALUE}
-            renderExtraButton={() =>
-              localValue.length > MIN_SLIDERS ? (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 shrink-0 rounded-none hover:bg-destructive/10 text-destructive"
-                  onClick={() => removeSlider(index)}
-                  disabled={disabled}
-                >
-                  <Minus className="h-3.5 w-3.5" />
-                </Button>
-              ) : null
-            }
-          />
-        ))}
-      </div>
+      {localValue.map((stepValue, index) => (
+        <SliderWithInput
+          key={index}
+          label={`Step ${index + 1}:`}
+          value={stepValue}
+          onValueChange={next => handleStepValueChange(index, next)}
+          onValueCommit={next => handleStepCommit(index, next)}
+          min={MIN_VALUE}
+          max={MAX_VALUE}
+          step={1}
+          incrementAmount={1}
+          disabled={disabled}
+          inputParser={v => parseInt(v) || MIN_VALUE}
+          renderExtraButton={() =>
+            localValue.length > MIN_SLIDERS ? (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onPress={() => removeSlider(index)}
+                disabled={disabled}
+              >
+                <Minus size={14} />
+              </Button>
+            ) : null
+          }
+        />
+      ))}
     </div>
   );
 }

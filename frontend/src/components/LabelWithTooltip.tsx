@@ -1,10 +1,4 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip";
-import { cn } from "../../lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@hanzo/ui";
 
 interface LabelWithTooltipProps {
   label: string;
@@ -13,14 +7,11 @@ interface LabelWithTooltipProps {
   htmlFor?: string;
 }
 
-/**
- * A reusable label component with optional tooltip.
- * When a tooltip is provided, it shows on hover over the label.
- */
+/** A label that grows a hover hint when one is supplied. */
 export function LabelWithTooltip({
   label,
   tooltip,
-  className,
+  className = "app-label",
   htmlFor,
 }: LabelWithTooltipProps) {
   if (!tooltip) {
@@ -32,16 +23,14 @@ export function LabelWithTooltip({
   }
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delay={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <label htmlFor={htmlFor} className={cn("cursor-help", className)}>
+          <label htmlFor={htmlFor} className={`${className} app-label--help`}>
             {label}
           </label>
         </TooltipTrigger>
-        <TooltipContent className="max-w-xs">
-          <p className="text-xs">{tooltip}</p>
-        </TooltipContent>
+        <TooltipContent maxW={320}>{tooltip}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
