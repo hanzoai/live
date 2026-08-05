@@ -609,8 +609,7 @@ export HANZO_LIVE_MODELS_DIR=/path/to/models
 
 - React 19 with TypeScript
 - Vite for build tooling
-- Tailwind CSS for styling
-- Radix UI components
+- @hanzo/ui components on @hanzo/gui (style props + CSS custom properties)
 - ESLint + Prettier
 
 ## Project Structure
@@ -673,8 +672,7 @@ hanzo-live/
     │   ├── types/              # TypeScript types
     │   └── lib/                # Utilities
     ├── package.json
-    ├── vite.config.ts
-    └── tailwind.config.js
+    └── vite.config.ts
 ```
 
 ## Technical Details

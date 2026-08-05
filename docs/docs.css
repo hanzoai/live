@@ -1,0 +1,189 @@
+/* Hanzo Live docs — plain CSS, theme tokens as custom properties. No frameworks. */
+:root {
+  --bg: #111827;
+  --bg-card: rgba(31, 41, 55, 0.5);
+  --bg-solid: #1f2937;
+  --bg-code: #111827;
+  --border: #374151;
+  --text: #fff;
+  --muted: #d1d5db;
+  --dim: #9ca3af;
+  --purple: #c084fc;
+  --purple-deep: #581c87;
+  --pink: #f472b6;
+  --pink-deep: #831843;
+  --blue: #60a5fa;
+  --green: #4ade80;
+  --yellow: #facc15;
+  --red: #f87171;
+  --indigo: #818cf8;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+body.gradient {
+  background: linear-gradient(135deg, var(--bg), var(--purple-deep), var(--bg));
+}
+
+.container { max-width: 72rem; margin: 0 auto; padding: 3rem 1rem; }
+.container.narrow { max-width: 56rem; padding: 2rem 1rem; }
+.container.mid { max-width: 64rem; padding: 2rem 1rem; }
+
+h1, h2, h3, h4 { margin: 0 0 0.5rem; font-weight: 700; line-height: 1.2; }
+h1 { font-size: 3rem; }
+h2 { font-size: 2rem; margin-bottom: 1rem; }
+h3 { font-size: 1.25rem; }
+p { margin: 0 0 1rem; }
+section { margin-bottom: 4rem; }
+a { color: inherit; text-decoration: none; transition: color 0.15s, border-color 0.15s, background 0.15s; }
+
+.hero { text-align: center; margin-bottom: 4rem; }
+.hero h1 {
+  font-size: 3.75rem;
+  background: linear-gradient(90deg, var(--purple), #db2777);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 1rem;
+}
+.hero .tagline { font-size: 1.5rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+.gradient-text-blue {
+  background: linear-gradient(90deg, var(--blue), #9333ea);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.gradient-text-green {
+  background: linear-gradient(90deg, var(--green), #2563eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.center { text-align: center; }
+.row { display: flex; align-items: center; gap: 1rem; }
+.btn-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.btn.purple-bg { background: #9333ea; }
+.btn.purple-bg:hover { background: #7e22ce; }
+.btn.indigo-bg { background: #4f46e5; }
+.btn.indigo-bg:hover { background: #4338ca; }
+.btn.white-bg { background: #fff; color: var(--purple-deep); font-weight: 700; font-size: 1.125rem; padding: 0.75rem 2rem; }
+.btn.white-bg:hover { background: #f3f4f6; }
+
+.grid { display: grid; gap: 1.5rem; }
+@media (min-width: 768px) {
+  .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1024px) {
+  .grid.cols-3-lg { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+.card.solid { background: var(--bg-solid); backdrop-filter: none; }
+.card .icon { font-size: 2.25rem; margin-bottom: 1rem; }
+a.card { display: block; }
+a.card:hover.purple { border-color: #a855f7; }
+a.card:hover.pink { border-color: #ec4899; }
+a.card:hover.blue { border-color: #3b82f6; }
+a.card:hover.green { border-color: #22c55e; }
+
+.purple { color: var(--purple); }
+.pink { color: var(--pink); }
+.blue { color: var(--blue); }
+.green { color: var(--green); }
+.yellow { color: var(--yellow); }
+.red { color: var(--red); }
+.indigo { color: var(--indigo); }
+.muted { color: var(--muted); }
+.dim { color: var(--dim); }
+.small { font-size: 0.875rem; }
+.bold { font-weight: 700; }
+
+.callout { border-radius: 0.75rem; padding: 1.5rem; border: 1px solid; }
+.callout.green { background: rgba(20, 83, 45, 0.25); border-color: #22c55e; color: var(--text); }
+.callout.green p, .callout.green li { color: #86efac; }
+.callout.blue { background: rgba(30, 58, 138, 0.2); border-color: #3b82f6; color: var(--text); }
+.callout.blue p, .callout.blue li, .callout.blue ol li { color: var(--muted); }
+
+.banner {
+  background: linear-gradient(90deg, var(--purple-deep), var(--pink-deep));
+  border: 1px solid #a855f7;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+.banner .tagline { font-size: 1.25rem; color: #e5e7eb; }
+
+ul, ol { margin: 0 0 1rem; padding-left: 1.25rem; color: var(--muted); }
+ul.plain { list-style: none; padding-left: 0; }
+ul.plain li, ul li, ol li { margin-bottom: 0.5rem; }
+li .fas.fa-check { color: var(--green); margin-right: 0.5rem; }
+li.sub { margin-left: 1.5rem; font-size: 0.875rem; list-style: none; }
+
+pre {
+  background: var(--bg-solid);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0 0 1rem;
+}
+pre.deep { background: var(--bg-code); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.875rem; }
+p code, li code { background: var(--bg-code); padding: 0.125rem 0.5rem; border-radius: 0.25rem; }
+
+table { width: 100%; text-align: left; border-collapse: collapse; }
+.table-wrap { overflow-x: auto; }
+thead tr { border-bottom: 1px solid #4b5563; }
+th { padding-bottom: 0.75rem; }
+tbody { color: var(--muted); }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+td { padding: 0.75rem 0; }
+
+.icon-row { display: flex; justify-content: center; gap: 1.5rem; }
+.icon-row a { font-size: 1.5rem; color: var(--dim); }
+.icon-row a:hover { color: var(--purple); }
+.link { color: var(--purple); }
+.link:hover { color: #d8b4fe; }
+.link.blue { color: var(--blue); }
+.link.blue:hover { color: #93c5fd; }
+.underline { text-decoration: underline; }
+
+footer {
+  text-align: center;
+  color: var(--dim);
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+footer .links { display: flex; justify-content: center; gap: 1rem; }
+
+.stack > * + * { margin-top: 1rem; }
+.stack-lg > * + * { margin-top: 1.5rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mb-12 { margin-bottom: 3rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }

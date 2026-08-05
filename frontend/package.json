@@ -14,13 +14,14 @@
   },
   "dependencies": {
     "@hanzo/data": "^1.2.2",
-    "@hanzo/gui": "^8.0.1",
+    "@hanzo/gui": "^8.0.2",
     "@hanzo/logo": "^1.0.2",
-    "@hanzo/ui": "^8.0.39",
+    "@hanzo/ui": "^8.0.48",
     "@hanzogui/config": "^8.0.1",
-    "@hanzogui/lucide-icons-2": "^8.0.1",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "@hanzogui/lucide-icons-2": "^8.0.2",
+    "@hanzogui/react-native-svg": "^8.0.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-native-web": "^0.21.2"
   },
   "devDependencies": {
