@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@hanzo/data": "1.2.4",
-    "@hanzo/gui": "8.3.0",
+    "@hanzo/gui": "8.3.1",
     "@hanzo/logo": "1.0.26",
     "@hanzo/ui": "8.27.0",
     "@hanzogui/config": "8.3.1",
@@ -27,7 +27,7 @@
     "@eslint/js": "^10.0.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
-    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
